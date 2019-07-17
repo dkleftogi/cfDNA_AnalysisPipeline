@@ -2,13 +2,8 @@
 
 Several recent studies have demonstrated the ability of cfDNA sequencing to provide early prognostication, better molecular profiling and monitoring of disease dynamics with many applications in genomic-driven oncology. 
 
-We provide the bioinformatics pipeline that offers ctDNA data preprocessing using UMIs, ultra-sensitive detection of SNVs using duplexCaller and evaluation of fragmentation profiles of cfDNA.
+We provide a bioinformatics pipeline that offers ctDNA data preprocessing using UMIs, ultra-sensitive detection of SNVs using duplexCaller (available at https://github.com/dkleftogi/duplexFiltering) and evaluation of fragmentation profiles of cfDNA.
 
-duplexCaller is a freely available software developed at the Institute of Cancer Research (ICR) and it is available at https://github.com/dkleftogi/duplexFiltering
-
-Here, we developed a newer version of duplexCaller that is part of a more complete bioinformatics workflow for the analysis of cfDNA data.
-
-We also developed a novel bioinformatics program to evaluate fragmentation profiles of cfDNA.
 
 ## Publication
 
