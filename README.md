@@ -6,7 +6,9 @@ We provide the bioinformatics pipeline that offers ctDNA data preprocessing usin
 
 duplexCaller is a freely available software developed at the Institute of Cancer Research (ICR) and it is available at https://github.com/dkleftogi/duplexFiltering
 
-We developed a newer version of duplexCaller that is part of a more complete bioinformatics workflow for the analysis of cfDNA data.
+Here, we developed a newer version of duplexCaller that is part of a more complete bioinformatics workflow for the analysis of cfDNA data.
+
+We also developed a novel bioinformatics program to evaluate fragmentation profiles of cfDNA.
 
 ## Publication
 
