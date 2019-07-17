@@ -1,6 +1,6 @@
-# Detection of genomic alterations using cfDNA sequencing
+# Detection of genomic alterations using error-corrected cfDNA sequencing
 
-Analysis of circulating free DNA (cfDNA) data has opened new opportunities for characterizing tumor mutational landscapes with many applications in genomic-driven oncology. We developed a customized targeted cfDNA sequencing approach for breast cancer (BC) using unique molecular identifiers for error correction (UMIs). 
+Several recent studies have demonstrated the ability of cfDNA sequencing to provide early prognostication, better molecular profiling and monitoring of disease dynamics with many applications in genomic-driven oncology. 
 
 We provide the bioinformatics pipeline that offers ctDNA data preprocessing using UMIs, ultra-sensitive detection of SNVs using duplexCaller and evaluation of fragmentation profiles of cfDNA.
 
