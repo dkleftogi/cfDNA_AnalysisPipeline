@@ -2,11 +2,11 @@
 
 Analysis of circulating free DNA (cfDNA) data has opened new opportunities for characterizing tumor mutational landscapes with many applications in genomic-driven oncology. We developed a customized targeted cfDNA sequencing approach for breast cancer (BC) using unique molecular identifiers for error correction (UMIs). 
 
-Here we provide the bioinformatics pipeline that offers ctDNA data preprocessing using UMIs, ultra-sensitive detection of SNVs using duplexCaller and evaluation of fragmentation profiles of cfDNA.
+We provide the bioinformatics pipeline that offers ctDNA data preprocessing using UMIs, ultra-sensitive detection of SNVs using duplexCaller and evaluation of fragmentation profiles of cfDNA.
 
 duplexCaller is a freely available software developed at the Institute of Cancer Research (ICR) and it is available at https://github.com/dkleftogi/duplexFiltering
 
-Here we provide a newer version of duplexCaller that is part of a more complete bioinformatics workflow for the analysis of cfDNA data.
+We developed a newer version of duplexCaller that is part of a more complete bioinformatics workflow for the analysis of cfDNA data.
 
 ## Publication
 
