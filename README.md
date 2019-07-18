@@ -53,10 +53,16 @@ vardict version 2019.06.04
 ensembl-vep vep 96.0
 ```
 
-To resolve all the above mentioned dependenices we use Conda and we provide a bach script (myEnvConfig.sh ) that installs all required packages using Bioconda.
+To resolve all the above mentioned dependenices we use Conda and we provide a bash script named 
+
+```
+myEnvConfig.sh
+```
+
+that installs all required packages using Bioconda. Please see the execution examples for more information.
 
 
-The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5 and tested in AWS systems XXX and XXXX
+The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5 and tested in AWS systems XXXX and XXXX
 
 
 #### Current Release
@@ -66,9 +72,9 @@ The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5
 
 ## Contact
 
-Dr Dimitrios Kleftogiannis and Jun Xian Liew
+Dimitrios Kleftogiannis and Liew Jun Xian
 
-Comments and bug reports are welcome, email to dimitrios_kleftogiannis@gis.a-star.edu.sg OR iewjx@gis.a-star.edu.sg
+Comments and bug reports are welcome, email to dimitrios_kleftogiannis@gis.a-star.edu.sg OR liewjx@gis.a-star.edu.sg
 
 I would also appreciate hearing about how you used this code, improvements that you have made to it.
  
@@ -80,6 +86,6 @@ Copyright 2019 -- Dimitrios Kleftogiannis -- Genome Institute of Singapore (GIS)
 
 Agency of Science Research and Technology (A*STAR)
        			
-You may not use this program except in compliance with the License. You may obtain a copy of the License at: https://opensource.org/licenses/ECL-2.0
+You may not use this program except in compliance with the License. You may obtain a copy of the License at XXX
 
 
