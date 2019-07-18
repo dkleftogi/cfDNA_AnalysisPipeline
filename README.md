@@ -17,6 +17,46 @@ DOI:
 
 ## Dependencies and System Requirements
 
+The developed bioinformatics pipeline is written in Python 2 version 2.7.10.
+
+The pipeline depends on the following packages:
+
+```
+fgbio version 0.8.1
+```
+
+```
+bwa version 0.7.15
+```
+
+```
+picard version 2.20.3
+```
+
+```
+samtools version 1.9
+```
+
+```
+pysam version 0.15.0.1
+```
+
+```
+vardict version 2019.06.04
+```
+
+```
+vardict version 2019.06.04
+```
+
+```
+ensembl-vep vep 96.0
+```
+
+To resolve all the above mentioned dependenices we use Conda and we provide a bach script (myEnvConfig.sh ) that installs all required packages using Bioconda.
+
+
+The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5 and tested in AWS systems XXX and XXXX
 
 
 #### Current Release
@@ -37,6 +77,8 @@ You are free to modify, extend or distribute this code, as long as our copyright
 ## Licence
 
 Copyright 2019 -- Dimitrios Kleftogiannis -- Genome Institute of Singapore (GIS)
+
+Agency of Science Research and Technology (A*STAR)
        			
 You may not use this program except in compliance with the License. You may obtain a copy of the License at: https://opensource.org/licenses/ECL-2.0
 
