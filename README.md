@@ -21,13 +21,7 @@ The developed bioinformatics pipeline is written in Python 2 version 2.7.10.
 
 The pipeline depends on the following packages:
 
-fgbio version 0.8.1
-bwa version 0.7.15
-picard version 2.20.3
-samtools version 1.9
-pysam version 0.15.0.1
-vardict version 2019.06.04
-ensembl-vep vep 96.0
+fgbio version 0.8.1 ; bwa version 0.7.15 ; picard version 2.20.3 ; samtools version 1.9 ; pysam version 0.15.0.1 ; vardict version 2019.06.04 ; ensembl-vep vep 96.0
 
 To resolve all the above mentioned dependenices we use Conda and we provide a bash script named 
 
@@ -40,12 +34,12 @@ that installs automatically all required packages using Bioconda.
 Please see the Execution_examples.md for more information. We also provide step by step execution guideliness.
 
 
-The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5 and tested in AWS systems XXXX and XXXX
+The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5 and tested in AWS systems Centos and XXXX
 
 
 #### Current Release
 
-17-Jul-2019 : 
+19-Jul-2019 : Beta version 1 (installed and tested on Centos)
 
 
 ## Contact
