@@ -21,7 +21,7 @@ The developed bioinformatics pipeline is written in Python 2 version 2.7.10.
 
 The pipeline depends on the following packages:
 
-fgbio version 0.8.1 ; bwa version 0.7.15 ; picard version 2.20.3 ; samtools version 1.9 ; pysam version 0.15.0.1 ; vardict version 2019.06.04 ; ensembl-vep version 96.0 ; r version 3.6.0
+fgbio version 0.8.1 ; bwa version 0.7.15 ; picard version 2.20.3 ; samtools version 1.9 ; pysam version 0.15.0.1 ; vardict version 2019.06.04 ; ensembl-vep version 96.0 ; R version 3.6.0
 
 To resolve all the above mentioned dependenices we use Conda and we provide a bash script named 
 

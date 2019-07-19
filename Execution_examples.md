@@ -1,6 +1,6 @@
 ## FAQ
 
-### Question 1: How do I install the pipeline ?
+### Question 1: How do I resolve the dependencies ?
 
 We provide a bash script that resolves all dependencies using Bioconda.
 
@@ -72,7 +72,7 @@ The main program is cfDNApipeline.py that take as input the following arguments:
 	
 ```
 
-To make the example more interactive let us assume the following input arguments:
+To make the example more interactive let us assume the following exxample with input arguments:
 
 ```
 	1. /home/centos 
@@ -114,7 +114,7 @@ The output is a file named:
 ```
  /home/centos/Results/example.FgbioDeDup.bam
 ```
-which contains only consensus reads after merging togethere paired-end reads with the same UMI tag.  
+which contains only consensus reads after merging together reads with the same UMI tag.  
 
 Please note that this step generates many intermediate results that are removed at the end of execution (TODO). 
 
@@ -125,7 +125,7 @@ The output of this step is a file named:
  /home/centos/Results/example.FgbioDeDup.Vardict.vcf
 ```
 
-Then, the file /home/centos/Results/example.FgbioDeDup.Vardict.vcf is passed to VEP for annotation using the locally installed Cache.
+Then, the file /home/centos/Results/example.FgbioDeDup.Vardict.vcf is passed to VEP for annotation using the locally installed Cache (give the correct DIR as input).
 
 The output of this step is a file named:
 ```
@@ -141,28 +141,27 @@ The output of this step is a file named:
 
 The post-filtered file is then passed to duplexCaller that identifies variants supported by in-silico duplexes. 
 
-The original duplexCaller implementation can be found at https://github.com/dkleftogi/duplexFiltering. 
+The original duplexCaller implementation can be found at https://github.com/dkleftogi/duplexFiltering
 
-However here we provide a more complete platform-independent version that provides a more readable list of variants.
+However here we provide a platform-independent version that over-simplifies execution.
 
 The final output of variant calling is a file named:
 ```
  /home/centos/Results/example.FgbioDeDup_VariantsClean.txt
 ```
-which is essentially a TAB limited file (self-explanatory columns) that reports all variants with support of duplexes.
 
 The last step of the pipeline concerns the evaluation profiles of cfDNA.
 
-To do so we have developed a program named insertSizeAnalysisBED.py that evaluates all fragments found and reports them in a file named:
+To do so we have developed a program named insertSizeAnalysisBED.py that evaluates fragmentation profiles of cfDNA and produces the following:
 ```
  /home/centos/Results/example.FgbioDeDup_Distreport.txt
 ```
 
 ### Question 4: Is it possible to run specific parts of the workflow and not the full thing ?
 
-The short answer to this question is NO. We are planning to provide this functionality in a future release.
+The short answer to this question is NO. We are planning to provide this functionality in the future.
 
-However for the time being the only program that is independent and can run alone is insertSizeAnalysisBED.py
+However for the time being we reccomend to run alone only insertSizeAnalysisBED.py
 
 This program takes as input the following argumenents:
 ```
@@ -173,14 +172,16 @@ This program takes as input the following argumenents:
 	3. The directory to store the results (absolute path)
 	
 ```
-Please note that users have the opportunity to run this analysis as part of the cfDNApipeline.py or alone using a command similar to the following:
+Please note can produce the same results as part of the main cfDNApipeline.py program or using the following command:
 ```
 python insertSizeAnalysisBED.py bamFile=/home/centos/data/TYL0002.bam bedFile=/home/centos/PanelDesigns/example_panel.bed outDIR=/home/centos/Results
 ```
 
-### Question 5: I found a folder named cfDNApipeline_scripts, what is it ?
+### Question 5: I found a folder named cfDNApipeline_scripts, what does it contain ?
 
-The pipeline generates internally this folder to store the commands. The commands are separated based on the steps of the analysis as follows:
+The folder is generated internally to store the execution commands. 
+
+The commands are grouped based on the steps of the analysis as follows:
 
 ```
 	1. example.FgbioDeDup_PrePro_commands.txt contains all commands for data pre-processing and deDup with UMIs
@@ -190,7 +191,7 @@ The pipeline generates internally this folder to store the commands. The command
 	5. example.FgbioDeDup_fragLenCommand.txt is the command to perform fragment lenght analysis
 
 ```
-In case one of the steps fails, or is required to re-run some step you can simply submit the corresponding script. This saves time and effort.
+In case one of the steps fails, or you need to re-run some part you can simply re-submit the corresponding script. This saves time and effort.
 
 
 ### Question 6: I have problems to run the analysis, what should I do ?
