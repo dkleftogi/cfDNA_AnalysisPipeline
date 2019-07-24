@@ -52,10 +52,10 @@ We are also interested to know about how you have used our source code, includin
  
 You are free to modify, extend or distribute our source code, as long as our copyright notice remains unchanged and included in its entirety. 
 
-## Licence
+## License
 
-This project is licenced under the MIT Licence.
+This project is licensed under the MIT License.
 
 Copyright 2019 Genome Institute of Singapore (GIS) and Agency for Science, Technology and Research (A*STAR).
 
-You may only use the source code in this repository in compliance with the license provided in this repository. For more details, please refer to the file named "LICENCE".
+You may only use the source code in this repository in compliance with the license provided in this repository. For more details, please refer to the file named "LICENSE.md".
