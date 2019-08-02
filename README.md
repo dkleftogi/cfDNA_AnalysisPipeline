@@ -1,4 +1,4 @@
-# Detection of genomic alterations using error-corrected cfDNA sequencing
+# Detection of genomic alterations with error-corrected cfDNA sequencing
 
 Several recent studies have demonstrated the ability of cfDNA sequencing to provide early prognostication, better molecular profiling and monitoring of disease dynamics with many applications in genomic-driven oncology. 
 
