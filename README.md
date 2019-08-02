@@ -2,8 +2,10 @@
 
 Several recent studies have demonstrated the ability of cfDNA sequencing to provide early prognostication, better molecular profiling and monitoring of disease dynamics with many applications in genomic-driven oncology. 
 
-We provide a bioinformatics pipeline that offers ctDNA data preprocessing using UMIs, ultra-sensitive detection of SNVs using VarDict and duplexCaller, annotation of variants using VEP and evaluation of fragmentation profiles of cfDNA.
-
+We provide a bioinformatics pipeline that offers:
+- cfDNA data preprocessing using UMIs
+- ultra-sensitive detection of SNVs using VarDict and duplexCaller 
+- annotation of variants using VEP and evaluation of fragmentation profiles of cfDNA
 
 ## Publication
 
@@ -17,49 +19,43 @@ DOI:
 
 ## Dependencies and System Requirements
 
-The developed bioinformatics pipeline is written in Python 2 version 2.7.10.
+Our bioinformatics pipeline is developed with Python version 2.7.10 and requires the following packages:
 
-The pipeline depends on the following packages:
+- bwa version 0.7.15
+- ensembl-vep version 96.0
+- fgbio version 0.8.1
+- picard version 2.20.3
+- pysam version 0.15.0.1
+- R version 3.6.0
+- samtools version 1.9
+- vardict version 2019.06.04
 
-fgbio version 0.8.1 ; bwa version 0.7.15 ; picard version 2.20.3 ; samtools version 1.9 ; pysam version 0.15.0.1 ; vardict version 2019.06.04 ; ensembl-vep version 96.0 ; R version 3.6.0
-
-To resolve all the above mentioned dependenices we use Conda and we provide a bash script named 
+To resolve all of the abovementioned dependenices we recommend installing these packages in a conda environment. You may refer to the following bash script which installs miniconda and all the required packages automatically.
 
 ```
 myEnvConfig.sh
 ```
 
-that installs automatically all required packages using Bioconda. 
+Please refer to Execution_examples.md for more information. We also provide step by step execution guidelines.
 
-Please see the Execution_examples.md for more information. We also provide step by step execution guideliness.
-
-
-The pipeline has been developed in a Mac OS computer with Mojave version 10.14.5 and tested in AWS M4.XLARGE machines with Centos 7 and XXXX
-
+Our bioinformatics pipeline is developed on a Mac OS computer with Mojave version 10.14.5 and tested on Amazon EC2 m4.xlarge machines with Centos 7 operating system installed.
 
 #### Current Release
 
 19-Jul-2019 : Beta version 1 (installed and tested on Centos); does not clean intermediate results
 
-
 ## Contact
 
-Dimitrios Kleftogiannis and Liew Jun Xian
+Comments and bug reports are welcome, please email: Dimitrios Kleftogiannis (dimitrios_kleftogiannis@gis.a-star.edu.sg) OR Liew Jun Xian (liewjx@gis.a-star.edu.sg)
 
-Comments and bug reports are welcome, email to dimitrios_kleftogiannis@gis.a-star.edu.sg OR liewjx@gis.a-star.edu.sg
-
-I would also appreciate hearing about how you used this code, improvements that you have made to it.
+We are also interested to know about how you have used our source code, including any improvements that you have implemented.
  
-You are free to modify, extend or distribute this code, as long as our copyright notice is included whole and unchanged. 
+You are free to modify, extend or distribute our source code, as long as our copyright notice remains unchanged and included in its entirety. 
 
-## Licence
+## License
 
-This project is licenced under the GNU GPLv3 Licence.
+This project is licensed under the MIT License.
 
-Copyright (C) 2019 -- Dimitrios Kleftogiannis -- Genome Institute of Singapore (GIS)
+Copyright 2019 Genome Institute of Singapore (GIS) and Agency for Science, Technology and Research (A*STAR).
 
-Agency of Science Research and Technology (A*STAR)
-       			
-You may not use this file except in compliance with the License. A copy of the licence is available, see file LICENCE.md 
-
-
+You may only use the source code in this repository in compliance with the license provided in this repository. For more details, please refer to the file named "LICENSE.md".
