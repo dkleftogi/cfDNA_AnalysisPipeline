@@ -6,16 +6,18 @@
 BEGIN COPYRIGHT NOTICE
 
     cfDNApipeline code -- (c) 2019 Dimitrios Kleftogiannis -- GIS -- A*STAR
-    
-    This Program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
+   	
+   	Copyright 2019 Genome Institute of Singapore (GIS) and Agency for Science, Technology and Research (A*STAR).
+
+    This Program is free software licensed under the MIT License.
+
+    You may only use the source code in this repository in compliance with the license provided in this repository. For more details, please refer to the file named "LICENSE.md".
 
     This Program is distributed as a service to the research community and is experimental in nature and may have hazardous properties. 
     
-    The Program is distributed WITHOUT ANY WARRANTY, express or implied. In particular all warranties as to SATISFACTORY QUALITY or FITNESS FOR A PARTICULAR PURPOSE are excluded. See the GNU General Public License for more details. 
+    The Program is distributed WITHOUT ANY WARRANTY, express or implied. In particular all warranties as to SATISFACTORY QUALITY or FITNESS FOR A PARTICULAR PURPOSE are excluded. 
 
-    A full copy of the licence is available at https://github.com/dkleftogi/cfDNA_AnalysisPipeline/blob/master/LICENCE.md
-
-    Published reports of research using this code (or a modified version) should cite the relevant article of this tool:
+    Published reports of research using this code (or a modified version) should cite the relevant article of this tool.
 
     Comments and bug reports are welcome.
        
