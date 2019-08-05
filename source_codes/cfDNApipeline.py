@@ -206,7 +206,7 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
 
         #command 9
         #the last part of the command might change depending on the conda env --> TMP_DIR=/shared is a dir with a lot of space to store interm results
-        mainCommand=GATK_sort+' I='+resultsDir+'/'+myArg+'.UnSorted.FgbioDeDup.bam O='+resultsDir+'/'+myArg+'.FgbioDeDup.bam SO=coordinate TMP_DIR=/shared'
+        mainCommand=GATK_sort+' I='+resultsDir+'/'+myArg+'.UnSorted.FgbioDeDup.bam O='+resultsDir+'/'+myArg+'.FgbioDeDup.bam SO=coordinate TMP_DIR=/tmp'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
