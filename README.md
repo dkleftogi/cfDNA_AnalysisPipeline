@@ -9,7 +9,7 @@ We provide a bioinformatics pipeline that offers:
 
 ## Publication
 
-Title: Detection of genomic alterations in breast cancer using circulating free DNA sequencing  
+Title: Detection of genomic alterations in breast cancer with circulating free DNA sequencing  
 
 Journal: N/A
 
