@@ -13,9 +13,9 @@ Title: Detection of genomic alterations in breast cancer with circulating free D
 
 Journal: N/A
 
-Published: pre-print available at bioRxiv
+Published: pre-print available at bioRxiv https://www.biorxiv.org/content/10.1101/733691v1?rss=1
 
-DOI: 
+DOI: https://doi.org/10.1101/733691
 
 ## Dependencies and System Requirements
 
