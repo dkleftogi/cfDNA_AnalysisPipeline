@@ -22,7 +22,7 @@ BEGIN COPYRIGHT NOTICE
 
     Comments and bug reports are welcome.
        
-    Email to dimitrios_kleftogiannis@gis.a-star.edu.sg
+    Email to dimitrios.kleftogiannis@kaust.edu.sa
 
     I would also appreciate hearing about how you used this code, improvements that you have made to it.
  
@@ -49,7 +49,7 @@ RUNNING
 	
 	An execution example is as follows:
 
-    python insertSizeAnalysisBED.py bamFile=0097_test.chr17.bam bedFile=intervals.bed outDIR=XXXXX
+    python insertSizeAnalysisBED.py bamFile=test.bam bedFile=intervals.bed outDIR=XXXXX
 
     To obtain the toy data we used for testing please contact Dimitrios
 
@@ -72,7 +72,7 @@ def printUsage():
     print('Where:\n') 
     print('\tfile.bam is a bam file. The bam file needs to be indexed with samtools.\n')
     print('\tfile.bed is a standard bed file with minimum three columns chrom start stop\n')
-    print('\toutDIR is the full path of the location to store the results\n')
+    print('\t/your/output/dir is the full path of the location to store the results\n')
 
     print('Please give the arguments in the indicated order similar to the provided example!\n') 
 
@@ -185,9 +185,9 @@ def generateReport(bedList,bamFilePrefix,RESULTS,outDIR):
         samFileName=RESULTS+'/'+bamFilePrefix+'_Target.sam'
         myBam=RESULTS+'/'+bamFilePrefix+'_'+myChrom+'.bam'
         generateSamFile(myBam,samFileName,myInterval,RESULTS)
-        #now read the target sam and generate the output
+        #read the target sam and generate the output
         parseSamFile(samFileName,OutReportFile,KEY)
-        #if you want to monitor your progress uncomment the following code
+        #to monitor progress uncomment the following code
         #if count%100==0:
          # print('Processed %d intervals\n'%(count))
         #count=count+1
@@ -247,7 +247,7 @@ def parseSamFile(samFileName,OutReportFile,KEY):
       RNEXT=tmp[6]
       PNEXT=tmp[7]
       TLEN=tmp[8]
-      #store records in the qHash
+      #store records to the qHash
       #consider all reads irespective of the mapping quality
       qnameKey=QNAME
       qHash[qnameKey].append(eachLine)
@@ -257,7 +257,7 @@ def parseSamFile(samFileName,OutReportFile,KEY):
       for idx in pairFound:
         #find the ones with no mate
         if len(pairFound)==1:
-        #find the ones with mate
+        #find the ones with read mate
           tmp=idx.split("\t")
           QNAME=tmp[0]
           FLAG=tmp[1]
@@ -278,7 +278,7 @@ def parseSamFile(samFileName,OutReportFile,KEY):
             #this is a translocation
             countNotPairedOther=countNotPairedOther+1
         elif len(pairFound)==2:
-        #check for error
+        #check for errors
           tmp=idx.split("\t")
           QNAME=tmp[0]
           FLAG=tmp[1]
@@ -295,8 +295,7 @@ def parseSamFile(samFileName,OutReportFile,KEY):
           countReadPairs=countReadPairs+1
         else:
           #used for debbuging
-          #print('Malakia paizei edo:%s'%idx)
-          #print('Mia malakia...\n')
+          #print('Malakia paizei:%s'%idx)
           myskip=0
           #used for debugging
     #print('Reads:%d\tReadsPaired:%d\tReadsNotPaired:%d\tReadsSame:%s\tReadsNotSame:%d\n'%(countTotalReads,countReadPairs,countNotPaired,countNotPairedSame,countNotPairedOther))
@@ -342,7 +341,7 @@ def myMain():
         printUsage()
     else:
         #parse the first input arguments 
-        #here if the user does not write the correct argument name it gets an error and the program stops
+        #here if the user does not input the correct argument name it gets an error and the program stops
         bamFile=sys.argv[1].split('bamFile=')
         bamFile=bamFile[1]
         #parse the second argument
@@ -446,7 +445,7 @@ def myMain():
             t.join()
         del threads
 
-         #wave 5
+        #wave 5
         threads = []
         i=1
         for chrom in chromList:
@@ -462,7 +461,7 @@ def myMain():
             t.join()
         del threads
 
-         #wave 6
+        #wave 6
         threads = []
         i=1
         for chrom in chromList:
