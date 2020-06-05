@@ -22,7 +22,7 @@ BEGIN COPYRIGHT NOTICE
 
     Comments and bug reports are welcome.
        
-    Email to dimitrios_kleftogiannis@gis.a-star.edu.sg
+    Email to dimitrios.kleftogiannis@kaust.edu.sa
 
     I would also appreciate hearing about how you used this code, improvements that you have made to it.
  
@@ -58,12 +58,30 @@ DEPENDENCIES
 
 RUNNING
     
-    An execution example is as follows:
+    An execution example is as follows, let us assume that: 
 
-    python cfDNApipeline.py workingDir=/home/centos fileName=/home/centos/data/example.bam resultsDir=/home/centos/Results referenceGenome=/home/centos/References/hg38.fa bedFile=/home/centos/bedFiles/panel_77.bed minVAF=0.005 tagUMI=ZU vepDir=/home/centos/vepCache
+    /home/centos is your working dir
+
+    /home/centos/data/example.bam is your input bam file
+
+    /home/centos/Results is the dir where you want to save the results
+
+    /home/centos/References/hg38.fa is your reference genome
+
+    /home/centos/bedFiles/panel.bed is your panel design
+
+    0.005 is your minimum VAF (you can set even lower value like 0.00001)
+
+    ZU is the UMI tag, other samples might have RX or so depending on the setup
+
+    /home/centos/vepCache is the dir of your VEP cache
+
+    Then you type:
+
+    python cfDNApipeline.py workingDir=/home/centos fileName=/home/centos/data/example.bam resultsDir=/home/centos/Results referenceGenome=/home/centos/References/hg38.fa bedFile=/home/centos/bedFiles/panel.bed minVAF=0.005 tagUMI=ZU vepDir=/home/centos/vepCache
 
 
-    To obtain toy data contact Dimitrios
+    To obtain the toy data contact Dimitrios
 
 '''
 
@@ -123,7 +141,7 @@ def storeFile(myFile):
         sys.exit()
     return aDict
 
-#this function takes the bam file with UMIs and removes the duplicates using  UMIs
+#this function takes the bam file with UMIs and removes the duplicates
 def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,tagUMI):
 
     #workingDir is the absolute path to your conda installation given from argument
@@ -149,7 +167,7 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
 
         #command 1
 
-        #the last part of the command might change depending on the conda env --> e.g., in Amazon EC2 clusters provided by RONIN TMP_DIR=/shared is a dir with a lot of space to store interm results
+        #in Amazon EC2 clusters provided by RONIN TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_sort+' I='+mergedDIR+'/'+myArg+'.bam O='+resultsDir+'/'+myArg+'.mergedQNAMEsorted.bam SO=queryname VERBOSITY=INFO TMP_DIR=/tmp'
         outScript.write(mainCommand)
         outScript.write("\n\n")
@@ -162,7 +180,7 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
 
 
         #command 3
-        #the command take parameters --edits=1 --min-map-q=20 --strategy=adjacency  by default, this might by the user if needed (hardcoded)
+        #the command take parameters --edits=1 --min-map-q=20 --strategy=adjacency  by default, the users can change this in the command below
         mainCommand=FGBIO_groupUMI+' --input='+resultsDir+'/'+myArg+'.mergedQNAMEsortedFixed.bam --output='+resultsDir+'/'+myArg+'.grouped.bam --edits=1 --min-map-q=20 --raw-tag='+tagUMI+' --strategy=adjacency --family-size-histogram='+resultsDir+'/'+myArg+'.groupedHist.txt'
         outScript.write(mainCommand)
         outScript.write("\n\n")
@@ -178,7 +196,7 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
         outScript.write("\n\n")
 
         #command 6
-        #the following parameters --error-rate-post-umi=30 --min-reads=2 --tag=MI are by default, this might by the user if needed (hardcoded)
+        #the following parameters --error-rate-post-umi=30 --min-reads=2 --tag=MI are by default, the users can change this in the command below
         mainCommand=FGBIO_generateConsensus+' --input='+resultsDir+'/'+myArg+'.grouped.bam --output='+resultsDir+'/'+myArg+'.consensusUnMapped.bam --error-rate-post-umi=30 --min-reads=2 --tag=MI'
         outScript.write(mainCommand)
         outScript.write("\n\n")
@@ -195,12 +213,8 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
         outScript.write("\n\n")
 
         #command 9
-<<<<<<< HEAD
-        mainCommand=GATK_sort+' I='+resultsDir+'/'+myArg+'.UnSorted.FgbioDeDup.bam O='+resultsDir+'/'+myArg+'.FgbioDeDup.bam SO=coordinate TMP_DIR=/shared'
-=======
-        #the last part of the command might change depending on the conda env --> TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_sort+' I='+resultsDir+'/'+myArg+'.UnSorted.FgbioDeDup.bam O='+resultsDir+'/'+myArg+'.FgbioDeDup.bam SO=coordinate TMP_DIR=/tmp'
->>>>>>> ca80606c0834bd2ee02d17f7d347e072f44d5b8d
+
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
@@ -227,8 +241,8 @@ def variantScreening(fileHash,workingDir,resultsDir,referenceGenome,bedFile,scri
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
-        #to make it more complete we also annotate variants 
-        #check here https://m.ensembl.org/info/docs/tools/vep/script/vep_cache.html for more info if needed
+        #we also annotate variants 
+        #check here https://m.ensembl.org/info/docs/tools/vep/script/vep_cache.html for more info about caches if needed
         mainCommand='vep -i '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.vcf -o '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.VEP.vcf --species homo_sapiens --cache --dir '+vepDir +' --canonical --check_existing --force_overwrite --vcf --buffer_size 50'
         outScript.write(mainCommand)
         outScript.write("\n")
@@ -260,7 +274,7 @@ def filterVCF(fileHash,resultsDir):
 
             for eachLine in InVcfFile:
 
-                #skipp the header
+                #skip the header
                 if eachLine[0]!='#':
 
                     line=eachLine.rstrip('\n')
@@ -275,7 +289,7 @@ def filterVCF(fileHash,resultsDir):
                     FILTER = tmp[6]
 
                     if FILTER=='PASS':
-                        #now continue and get more specific fields about the variant of interest
+                        #get more specific fields about the variant of interest
                         FORMAT=tmp[7]
                         tmp=FORMAT.split(';')
                         #the last at the end is the VEP annotation that we need to parse separately using comma delimiter
@@ -296,7 +310,7 @@ def filterVCF(fileHash,resultsDir):
                         vaf = tmp[4].split('AF=')
                         vaf = float(vaf[1])
 
-                        #not sure if we use this info
+                        #we do not use this info
                         bias = tmp[5].split('BIAS=')
                         bias = bias[1]
 
@@ -328,7 +342,7 @@ def filterVCF(fileHash,resultsDir):
                         hicnt = tmp[22].split('HICNT=')
                         hicnt = int(hicnt[1])
 
-                        #consider high coverage variables
+                        #consider high coverage reads
                         hicov = tmp[23].split('HICOV=')
                         hicov = int(hicov[1])
 
@@ -353,7 +367,7 @@ def filterVCF(fileHash,resultsDir):
                                     #write the output except for Complex type of mutations returned by VarDict
                                     if 'Complex' not in variantType:
                                         
-                                        #apply some filtering based on reads
+                                        #apply some filtering
                                         a=varbias.split(':')
                                         FW=int(a[0])
                                         BW=int(a[1])
@@ -525,14 +539,14 @@ def myMain():
         print('************************************************************************************************************************************\n')
         print('\t\t\t\t\t\tYour input arguments are not correct!\n')
         print('\t\t\t\t\t   Genome Institute of Singapore (GIS) -- A*STAR\n')
-        print('\t\t\tCopyright 2019 GIS -  Dimitrios Kleftogiannis & Jun Xian Liew - dimitrios_kleftogiannis@gis.a-star.edu.sg\n')
+        print('\t\t\tCopyright 2019 GIS -  Dimitrios Kleftogiannis & Jun Xian Liew - dimitrios.kleftogiannis@kaust.edu.sa\n')
         #if arguments are not correct print a help message
         printUsage()
     else:
         print('************************************************************************************************************************************\n')
         print('\t\t\t cfDNApipeline.py: Run the full pipeline for cfDNA data processing and analysis\n')
         print('\t\t\t\t  Genome Institute of Singapore (GIS) -- A*STAR\n')
-        print('\t\tCopyright 2019 GIS - Dimitrios Kleftogiannis & Jun Xian Liew - dimitrios_kleftogiannis@gis.a-star.edu.sg\n')        
+        print('\t\tCopyright 2019 GIS - Dimitrios Kleftogiannis & Jun Xian Liew - dimitrios.kleftogiannis@kaust.edu.sa\n')        
         #parse the input arguments 
         
         workingDir   =sys.argv[1].split('workingDir=')
@@ -565,7 +579,7 @@ def myMain():
         vepDir   =sys.argv[8].split('vepDir=')
         vepDir   =vepDir  [1]
 
-        #print the arguments given by user; is good for 'self' debugging
+        #print the arguments given by user
         print('Execution started with the following parameters:\n')
         print('1. workingDir             :         \t\t\t\t%s' % workingDir)
         print('2. fileName               :         \t\t\t\t%s' % fileName)
@@ -597,7 +611,7 @@ def myMain():
         print('\n\n[%s] Function processSample: produce BAM file with consensus sequences'%(st))
         processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,tagUMI)
 
-        #based on the consensus run variant screening
+        #based on the consensus, run variant screening
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\n[%s] Function variantScreening: perform variant screening and annotate variants'%(st))
@@ -615,7 +629,7 @@ def myMain():
         print('\n\n[%s] Function convertInputVCF: parse filtered VCF file and convert position files'%(st))
         convertFilteredVCF(fileHash,resultsDir)
 
-        #and run it
+        #run it
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\n[%s] Function runDuplexCaller: identify duplexes using duplexCaller'%(st))
@@ -627,7 +641,7 @@ def myMain():
         print('\n[%s] Function cleanVariantReport: produce final variant report'%(st))
         cleanVariantReport(fileHash,resultsDir,referenceGenome,scriptsFolder)
 
-        #finally we run the fragment lenght analysis script insertSizeAnalysisBED.py
+        #finally we run the fragment lenght analysis from script insertSizeAnalysisBED.py
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n[%s] Function fragmentLenAnalysis: perform analysis of fragment lenght'%(st))
@@ -636,6 +650,6 @@ def myMain():
 
         print('************************************************************************************************************************************\n')
 
-#this is where we start
+#this is where we start ...
 if __name__=='__main__':
     myMain()
