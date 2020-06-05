@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 
 '''
-duplexCaller version for identification of variants supported by duplexes in deep-sequencing data
+duplexCaller version for identification of variants supported by reads with duplex configuration in deep-sequencing data
 
 This code is originally published at https://github.com/dkleftogi/duplexFiltering and here we re-implemented it as part of a cfDNA analysis pipeline.
 
@@ -23,7 +23,7 @@ BEGIN COPYRIGHT NOTICE
 
     Comments and bug reports are welcome.
        
-    Email to dimitrios_kleftogiannis@gis.a-star.edu.sg
+    Email to dimitrios.kleftogiannis@kaust.edu.sa
 
     I would also appreciate hearing about how you used this code, improvements that you have made to it.
  
@@ -71,7 +71,7 @@ import threading
 #prints information about program's execution
 def printUsage():
     print('To run this program please type the following:')
-    print('\tpython duplexCallerModified_AWS.py bamFile=test.chr17.bam positionFile=positions.bed referenceGenome=file.fa outDIR=Results index=1\n')
+    print('\tpython duplexCallerModified_AWS.py bamFile=file.bam positionFile=file.bed referenceGenome=file.fa outDIR=Results index=1\n')
     print('Where:\n') 
     print('\tfile.bam is a bam file.\n')
     print('\tfile.bed is a bed-like file with your input genomic positions. Please write chromosome and start only\n')
@@ -125,7 +125,7 @@ class myVariantThread (threading.Thread):
         #print('%s\n'%myStr) 
         splitFlatFile(self.name,self.pos,self.targetSamFileName,self.myDir)
 
-#this is the function that parses the slice of the original QNAME and write them 
+#this is the function that parses the slice of the original QNAME and writes them 
 def parseQname(threadName, chrom, fileName, inputBam, myDir,qHash):
     if exitFlag:
         threadName.exit()
@@ -150,7 +150,7 @@ def splitChrom(threadName, chrom, fileName, inputBam, myDir):
    #print(command)
    #print('\t\tFinished:%s\n'%(threadName))
 
-#save the genomic positions of interest; remember this is not the panel design
+#save the genomic positions of interest; remember this is not the actula panel design but a modified version
 def storePositionsFile(bedFile):
     #save the positions
     aDict={}
@@ -220,7 +220,7 @@ def generateTargetSamFile(posList,bamFile,targetSamFileName,SAM_FILES,index):
         sys.exit()
 
 
-#save the genomic positions of interest; remember this is not the panel design
+#save the genomic positions of interest; this is not the panel design but a modified version
 def storeChromosomes(bedFile):
     #save the positions
     aList=[]
@@ -263,7 +263,7 @@ def generateFlatFile(samFileName,flatFileName,refGenome):
             #load the reference genome
             myFasta=pysam.FastaFile(refGenome)
             for eachLine in InSamFile:
-                #here might be is a problem with the TAB delimiting in Python 3; please be careful with versions.
+                #here might be is a problem with the TAB delimiting in Python 3; check versions if there is any problem
                 line = eachLine.rstrip('\n')
                 tmp=line.split("\t")
                 #read the sam fields we neeed
@@ -380,7 +380,7 @@ def generateFlatFile(samFileName,flatFileName,refGenome):
                                 #print('QNAME:%s\tVariantPos:%s\t [%d - %d] and [%d - %d] with [%d - %d] %s\n'%(QNAME,prompt_pos,a,b,c,d,overlap_start,overlap_end,flag))
                                 #print('QNAME:%s\tCIGAR:%s\tSEQ:%s\tREAD_LEN:%d\tnumValues:%s\tflagValues:%s\tINS_LEN:%s --> %d and %s'%(QNAME,CIGAR,SEQ,len(SEQ),numValues,flagValues,TLEN_int,prompt_pos,eachValue))
                             else:
-                                #this is the same as before
+                                #same concept as before
                                 readPos=0
                                 refPos=int(POS)
                                 for eachValue,eachFlag in zip(numValues,flagValues):
@@ -486,7 +486,7 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
     #the key will be the chrom and the value will be the actual QNAME
     qnameDict=defaultdict(list)
 
-    #prepare the output file and write it directly to the out folder....
+    #prepare the output file and write it directly to out folder
     outFileName=RESULTS+'/'+bamFilePrefix+'_VariantReport.txt'
     outFile=open(outFileName,'w')
     outFile.write('#CHROM\tPOSITION\tREFERENCE\tTOTAL_READS\tA\tC\tG\tT\tDEL\tDist,Frag_A,DUP_A\tDist,Frag_C,DUP_C\tDist,Frag_G,DUP_G\tDist,Frag_T,DUP_T\tDist,Frag_DEL,DUP_DEL\tDist,Frag_INS,DUP_INS\n')
@@ -758,7 +758,7 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
 #to decide about the variant calling
 def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
 
-    #mock variable dummy
+    #variable dummy
     dummy=0
     XI=''
     DUP=0
@@ -766,7 +766,6 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
     positionHashXI=defaultdict(list)
     positionHash=defaultdict(list)
 
-    #this is a new addition
     extraPositionHash=defaultdict(list)
 
     for recordKey in myHash:
@@ -819,7 +818,7 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
                 c=128
                 myFlag=''
                 if ((currentFlag&b)==64 and (currentFlag&c==0)):
-                #the current flag is first in pair sto the other read is the second
+                #the current flag is first in pair to the other read is the second
                     myFlag=128
                 elif (currentFlag&b)==0 and (currentFlag&c==128):
                 #the current flag is second in pair so make it first
@@ -875,7 +874,7 @@ def findPairOrientation(insHash):
         #dictOUT.write('%s\t%s\t%s\n'%(insSize,len(recordsFound),duplexes))
     return DUP
 
-#erase the big sam files to save some space...
+#erase the big sam files to save some space
 def cleanFiles(SAM_FILES):
     command='rm '+SAM_FILES+'/*.txt && rm '+SAM_FILES+'/*.bed && rm '+SAM_FILES+'/*.sam && rm '+SAM_FILES+'/*.bam'
     os.system(command)
@@ -995,7 +994,7 @@ def myMain():
         cleanFiles(SAM_FILES)
 
 
-#this is where we start
+#this is where we start ...
 if __name__=='__main__':
     myMain()
 
