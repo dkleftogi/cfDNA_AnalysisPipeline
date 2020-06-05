@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 
 '''
-				Parse a variant report returned by duplex caller and filter the results to produce a readable report
+				Parse a variant report returned by duplexCaller and filter the results to produce a readable report
                       
 BEGIN COPYRIGHT NOTICE
 
@@ -21,7 +21,7 @@ BEGIN COPYRIGHT NOTICE
 
     Comments and bug reports are welcome.
        
-    Email to dimitrios_kleftogiannis@gis.a-star.edu.sg
+    Email to dimitrios.kleftogiannis@gkaust.edu.sa
 
     I would also appreciate hearing about how you used this code, improvements that you have made to it.
  
@@ -44,7 +44,7 @@ def printUsage():
     print('To run this program please type the following:')
     print('\tpython filterVariantReportAdjusted.py inputFile=report.txt originalVCF=vcf.txt\n')
     print('Where:\n') 
-    print('\tfile.txt is a variant report returned by duplexCaller\n')
+    print('\treport.txt is a variant report returned by duplexCaller\n')
     print('\tvcf.txt is the original VCF file that contains reference and mutated allele\n')
     print('Please give the arguments in the indicated order similar to the provided example!\nThe input data are pre-processed separately from the VCF using Unix commands') 
 
@@ -241,8 +241,6 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 							else:
 								a=0
 
-							#here we apply the new rules
-
 							if (hicov>=100 and hicnt>=3 and FW>1 and BW>1 and pmean>15 and sn>20 and duplexes>=1 and distFrag>=2 and distPairs>1):
 								flag='YES'
 							else:
@@ -308,7 +306,6 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 									AdjustedVAF=float(V-A)/(float(V+N-A-K))
 								else:
 									AdjustedVAF=0
-								#here we adjust the values and we apply more strict filtering
 								if (hicov>=200 and hicnt>=6 and FW>1 and BW>1 and pmean>15 and sn>25 and duplexes>2 and distFrag>=2 and distPairs>2):
 									flag='YES'
 									myExtraCount=myExtraCount+1
@@ -396,7 +393,7 @@ def myMain():
 		storeVariantReport(inputFile,originalVCF,inputFilePrefix)
 
 
-#this is where we start
+#this is where we start ...
 if __name__=='__main__':
 	myMain()
 
