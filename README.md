@@ -1,4 +1,4 @@
-# Detection of genomic alterations using error-corrected cfDNA sequencing
+# Detection of genomic alterations with error-corrected cfDNA sequencing
 
 Several recent studies have demonstrated the ability of cfDNA sequencing to provide early prognostication, better molecular profiling and monitoring of disease dynamics with many applications in genomic-driven oncology. 
 
@@ -9,13 +9,13 @@ We provide a bioinformatics pipeline that offers:
 
 ## Publication
 
-Title: Detection of genomic alterations in breast cancer using circulating free DNA sequencing  
+Title: Detection of genomic alterations in breast cancer with circulating free DNA sequencing  
 
 Journal: N/A
 
-Published: pre-print available at bioRxiv
+Published: pre-print available at bioRxiv https://www.biorxiv.org/content/10.1101/733691v1?rss=1
 
-DOI: 
+DOI: https://doi.org/10.1101/733691
 
 ## Dependencies and System Requirements
 
