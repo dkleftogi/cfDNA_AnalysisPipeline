@@ -43,10 +43,11 @@ Our bioinformatics pipeline is developed on a Mac OS computer with Mojave versio
 #### Current Release
 
 19-Jul-2019 : Beta version 1 (installed and tested on Centos); does not clean intermediate results
+5-Jun-2020  : We cleaned the codes and removed some "TODO staff" after the comment we received from one reviewer
 
 ## Contact
 
-Comments and bug reports are welcome, please email: Dimitrios Kleftogiannis (dimitrios_kleftogiannis@gis.a-star.edu.sg) OR Liew Jun Xian (liewjx@gis.a-star.edu.sg)
+Comments and bug reports are welcome, please email: Dimitrios Kleftogiannis (dimitrios.kleftogiannis@kaust.edu.sa) OR Liew Jun Xian (liewjx@gis.a-star.edu.sg)
 
 We are also interested to know about how you have used our source code, including any improvements that you have implemented.
  
