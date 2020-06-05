@@ -93,7 +93,7 @@ def printUsage():
     print('tagUMI          is tag string used to group reads from the same family\n')
     print('vepDir          is the absolute directory where VEP Cache is downloaded and indexed\n')
     print('\n\nExample:\n')
-    print('python cfDNApipeline.py workingDir=/home/centos fileName=/home/centos/data/example.bam resultsDir=/home/centos/Results referenceGenome=/home/centos/References/hg38.fa bedFile=/home/centos/bedFiles/panel_77.bed minVAF=0.005 tagUMI=ZU vepDir=/home/centos/vepCache')
+    print('python cfDNApipeline.py workingDir=/your/working/dir fileName=/path/to/your/example.bam resultsDir=/your/results/dir referenceGenome=/path/to/your/reference/genome.fa bedFile=/path/to/your/panel.bed minVAF=0.005 tagUMI=ZU vepDir=/path/to/your/VEP/cache')
     print('\n\nPlease give the arguments in the indicated order similar to the example provided!\n') 
     print('\n\nAnd remember to activate the conda env\n') 
 
@@ -123,11 +123,10 @@ def storeFile(myFile):
         sys.exit()
     return aDict
 
-#this function take the bam file with UMIs and removes the duplicates using  UMIs
+#this function takes the bam file with UMIs and removes the duplicates using  UMIs
 def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,tagUMI):
 
-    #TODO
-    #we need to change the absolute paths based on our conda installation
+    #workingDir is the absolute path to your conda installation given from argument
     GATK_merge='java -Xmx10g -XX:-UseGCOverheadLimit -d64 -jar '+workingDir+'/miniconda2/share/picard-2.20.3-0/picard.jar MergeSamFiles'
     GATK_deDup='java -Xmx10g -XX:-UseGCOverheadLimit -d64 -jar '+workingDir+'/miniconda2/share/picard-2.20.3-0/picard.jar MarkDuplicates'
     GATK_sort='java  -Xmx10g -XX:-UseGCOverheadLimit -d64 -jar '+workingDir+'/miniconda2/share/picard-2.20.3-0/picard.jar SortSam'
@@ -150,7 +149,7 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
 
         #command 1
 
-        #the last part of the command might change depending on the conda env --> TMP_DIR=/shared is a dir with a lot of space to store interm results
+        #the last part of the command might change depending on the conda env --> e.g., in Amazon EC2 clusters provided by RONIN TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_sort+' I='+mergedDIR+'/'+myArg+'.bam O='+resultsDir+'/'+myArg+'.mergedQNAMEsorted.bam SO=queryname VERBOSITY=INFO TMP_DIR=/tmp'
         outScript.write(mainCommand)
         outScript.write("\n\n")
@@ -163,60 +162,48 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
 
 
         #command 3
-        
-        #TODO 
-        #the command take parameters --edits=1 --min-map-q=20 --strategy=adjacency  by default, this might change in the future
+        #the command take parameters --edits=1 --min-map-q=20 --strategy=adjacency  by default, this might by the user if needed (hardcoded)
         mainCommand=FGBIO_groupUMI+' --input='+resultsDir+'/'+myArg+'.mergedQNAMEsortedFixed.bam --output='+resultsDir+'/'+myArg+'.grouped.bam --edits=1 --min-map-q=20 --raw-tag='+tagUMI+' --strategy=adjacency --family-size-histogram='+resultsDir+'/'+myArg+'.groupedHist.txt'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 4
-        #the last part of the command might change depending on the conda env --> TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_sort+' I='+resultsDir+'/'+myArg+'.grouped.bam O='+resultsDir+'/'+myArg+'.groupedSorted.bam SO=coordinate TMP_DIR=/tmp'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 5
-        #depends on the absolute path of samtools
         mainCommand='samtools index '+resultsDir+'/'+myArg+'.groupedSorted.bam'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 6
-
-        #the following parameters --error-rate-post-umi=30 --min-reads=2 --tag=MI are by default, but might change as well
+        #the following parameters --error-rate-post-umi=30 --min-reads=2 --tag=MI are by default, this might by the user if needed (hardcoded)
         mainCommand=FGBIO_generateConsensus+' --input='+resultsDir+'/'+myArg+'.grouped.bam --output='+resultsDir+'/'+myArg+'.consensusUnMapped.bam --error-rate-post-umi=30 --min-reads=2 --tag=MI'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 7
-
-        #the last part of the command might change depending on the conda env --> TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_samToFastq+' I='+resultsDir+'/'+myArg+'.consensusUnMapped.bam F='+resultsDir+'/'+myArg+'.R1.fastq F2='+resultsDir+'/'+myArg+'.R2.fastq VALIDATION_STRINGENCY=SILENT TMP_DIR=/tmp'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 8
-
-        #depends on the absolute path of samtools
         rgTAG='\'@RG\\tID:FgBio.'+myArg+''+'\\tPL:ILLUMINA\\tLB:ALL\\tPU:NA\\tSM:'+projectName+'\\tCN:NA\''
         mainCommand=BWA_MEM+rgTAG+' -M '+referenceGenome+' '+resultsDir+'/'+myArg+'.R1.fastq '+resultsDir+'/'+myArg+'.R2.fastq | samtools view -hb - > '+resultsDir+'/'+myArg+'.UnSorted.FgbioDeDup.bam'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 9
-        #the last part of the command might change depending on the conda env --> TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_sort+' I='+resultsDir+'/'+myArg+'.UnSorted.FgbioDeDup.bam O='+resultsDir+'/'+myArg+'.FgbioDeDup.bam SO=coordinate TMP_DIR=/shared'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #command 10
-        #depends on the absolute path of samtools
         mainCommand='samtools index '+resultsDir+'/'+myArg+'.FgbioDeDup.bam'
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
-        #here we might need to add rm commands and erase all intermediate results
         outScript.close()
 
         #submit it
@@ -231,19 +218,12 @@ def variantScreening(fileHash,workingDir,resultsDir,referenceGenome,bedFile,scri
         outScriptFile=scriptsFolder+'/'+myArg+'_VarScreening_commands.txt'
         outScript=open(outScriptFile,'w')
 
-        
-        #TODO
-        #here the paths to run the following commands depend on the conda installation and the env we generate
-        #we need to specify the absolute path of the R scripts used by vardict
         mainCommand='vardict -G '+referenceGenome+' -f '+str(minVAF_float)+ ' -N '+myArg+' -b '+resultsDir+'/'+myArg+'.FgbioDeDup.bam -z -c 1 -S 2 -E 3 -g 4 -h '+bedFile+' | '+workingDir+'/miniconda2/share/vardict-2019.06.04-0/teststrandbias.R | '+workingDir+'/miniconda2/share/vardict-2019.06.04-0/var2vcf_valid.pl -N '+myArg+' -E -f '+str(minVAF_float)+' > '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.vcf '
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
         #to make it more complete we also annotate variants 
-        #here by default we have homo sapiens species 
-        #and we need to think about this argument --dir /shared/vepCache/
-
-        #check here https://m.ensembl.org/info/docs/tools/vep/script/vep_cache.html
+        #check here https://m.ensembl.org/info/docs/tools/vep/script/vep_cache.html for more info if needed
         mainCommand='vep -i '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.vcf -o '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.VEP.vcf --species homo_sapiens --cache --dir '+vepDir +' --canonical --check_existing --force_overwrite --vcf --buffer_size 50'
         outScript.write(mainCommand)
         outScript.write("\n")
@@ -257,8 +237,6 @@ def variantScreening(fileHash,workingDir,resultsDir,referenceGenome,bedFile,scri
 
 
 #this function parses the annotated VCF and selects only the MODERATE/HIGH calls that fullfill specific criteria
-#described in the paper
-
 def filterVCF(fileHash,resultsDir):
 
     for myArg in fileHash:
@@ -329,8 +307,7 @@ def filterVCF(fileHash,resultsDir):
                         #mean quality in reads
                         qual = tmp[10].split('QUAL=')
                         qual = float(qual[1])
-                        #this is the fisher's test p-value but dont know how it is computed....
-                        #we dont really know the null hypothesis
+                        #this is the Fisher's test p-value from VarDict
                         sbf = tmp[12].split('SBF=')
                         sbf = float(sbf[1])
 
@@ -366,13 +343,12 @@ def filterVCF(fileHash,resultsDir):
                                 Existing_variation = vepTmp[17]
                                 AF = vepTmp[24]
                                 CLIN_SIG = vepTmp[25]
-                                #here we continue otherwise we skip because we are not interested in synonymus
+                                #here we continue otherwise we skip because we are not interested in synonymous variants...
                                 if IMPACT=='MODERATE' or IMPACT=='HIGH':
-                                    #write the output except for Complex
+                                    #write the output except for Complex type of mutations returned by VarDict
                                     if 'Complex' not in variantType:
                                         
-                                        #apply some filtering based on reads...
-                                        #ad-hoc rules but it is OK for now
+                                        #apply some filtering based on reads
                                         a=varbias.split(':')
                                         FW=int(a[0])
                                         BW=int(a[1])
@@ -414,10 +390,7 @@ def convertFilteredVCF(fileHash,resultsDir):
                     refAllele=tmp[2]
                     altAllele=tmp[3]
                     myType=tmp[5]
-                    #HERE WE NEED TO MODIFY THE TYPES BECAUSE THEY ARE DIFFERENT
-                    #SNP = SNV
-                    #DEL = Deletion
-                    #INS = Insertion
+                    
                     if myType=='SNV' or myType=='SNP':
                         outFile.write('%s\t%s\n'%(chrom,pos))
                     elif myType=='DEL' or myType=='Deletion':
@@ -462,14 +435,12 @@ def runDuplexCaller(fileHash,resultsDir,referenceGenome,scriptsFolder):
 
             outScriptFile=scriptsFolder+'/'+myArg+'_duplexCallerCommand.txt'
             outScript=open(outScriptFile,'w')
-            #here we need to specify the absolute paths based on the conda env
             myBAM=resultsDir+'/'+myArg+'.FgbioDeDup.bam'
             Num=1
             outScript.write('python duplexCallerModified_AWS.py bamFile=%s positionFile=%s referenceGenome=%s outDIR=%s index=%d\n'%(myBAM,positionFile,referenceGenome,resultsDir,Num))
             outScript.close()
 
             #we submit the duplexCaller script
-            #submit it
             command='sh '+outScriptFile
             os.system(command)
 
@@ -501,8 +472,6 @@ def cleanVariantReport(fileHash,resultsDir,referenceGenome,scriptsFolder):
                 command='sh '+outScriptFile
                 os.system(command)
 
-
-                #submit the script and you have the results
             else:
                 ts = time.time()
                 st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
@@ -576,11 +545,10 @@ def myMain():
         bedFile =sys.argv[5].split('bedFile=')
         bedFile =bedFile[1]
 
-        #TODO
-        #here it will be good to check the input and convert to default if minVAF>1 or minVAF<0
+        
         minVAF =sys.argv[6].split('minVAF=')
         minVAF =minVAF[1]
-        #if you have more efficient way please change
+        
         minVAF_float=float(minVAF)
         if minVAF_float<0 or minVAF_float>1.00:
             print('\nWARNING: User gave invalid minVAF argument. Execution continues with default minVAF=0.005\n')
@@ -605,9 +573,7 @@ def myMain():
        
         #generate a folder to store the scripts
         scriptsFolder=workingDir+'/cfDNApipeline_scripts'
-        #LSF_logs='/shared/alignAndDeDup_outLogs'
-        #LSF_err='/shared/alignAndDeDup_errLogs'
-        #/shared/
+
         command='mkdir -p '+scriptsFolder #+' && mkdir -p '+LSF_logs+' && mkdir -p '+LSF_err
         os.system(command)
         #generate the folder for the results
@@ -644,7 +610,7 @@ def myMain():
         print('\n\n[%s] Function convertInputVCF: parse filtered VCF file and convert position files'%(st))
         convertFilteredVCF(fileHash,resultsDir)
 
-        #prepare the data for duplexCaller
+        #and run it
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\n[%s] Function runDuplexCaller: identify duplexes using duplexCaller'%(st))
@@ -656,7 +622,7 @@ def myMain():
         print('\n[%s] Function cleanVariantReport: produce final variant report'%(st))
         cleanVariantReport(fileHash,resultsDir,referenceGenome,scriptsFolder)
 
-        #finally we run the fragment lenght analysis script insertSizeAnalysisBED.py in a similar fashion
+        #finally we run the fragment lenght analysis script insertSizeAnalysisBED.py
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n[%s] Function fragmentLenAnalysis: perform analysis of fragment lenght'%(st))

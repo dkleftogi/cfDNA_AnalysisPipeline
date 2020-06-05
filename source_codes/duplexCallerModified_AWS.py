@@ -58,8 +58,6 @@ RUNNING
 
 '''
 
-#modules we need, I might have some extra that didnt use in the final version, but I forgot to remove.
-#Remember that this program is under-developement so you may find block of codes used for testing.
 import sys
 import os
 import pysam
@@ -147,10 +145,6 @@ def parseQname(threadName, chrom, fileName, inputBam, myDir,qHash):
 def splitChrom(threadName, chrom, fileName, inputBam, myDir):
    if exitFlag:
       threadName.exit()
-   #print "%s: %s" % (threadName, time.ctime(time.time()))
-
-   #here need to specify the actual path of samtools
-
    command='samtools view -b '+inputBam+' '+chrom+' > '+myDir+'/'+fileName+'_'+chrom+'.bam && samtools index '+myDir+'/'+fileName+'_'+chrom+'.bam'
    os.system(command)
    #print(command)
@@ -212,7 +206,7 @@ def generateTargetSamFile(posList,bamFile,targetSamFileName,SAM_FILES,index):
 
         outSamFile.close()
         outPosFile.close()
-        #now generate the dictionary on the disc...
+        #now generate the dictionary on disc...
         command='paste '+tmpPosFile+' '+tmpSamFile+' > '+ targetSamFileName
         os.system(command)
 
@@ -269,7 +263,7 @@ def generateFlatFile(samFileName,flatFileName,refGenome):
             #load the reference genome
             myFasta=pysam.FastaFile(refGenome)
             for eachLine in InSamFile:
-                #here there is a problem with the TAB delimiting in Python; please be careful !!
+                #here might be is a problem with the TAB delimiting in Python 3; please be careful with versions.
                 line = eachLine.rstrip('\n')
                 tmp=line.split("\t")
                 #read the sam fields we neeed
@@ -286,30 +280,15 @@ def generateFlatFile(samFileName,flatFileName,refGenome):
                 SEQ=tmp[10]
                 QUAL=tmp[11]
                 
-                #skip the reads with zero mapping quality
+                #skip the reads with low mapping quality
                 MAPQ_int=int(MAPQ)
                 if MAPQ_int>5:
-                    #CAREFUL here...
-                    #CAREFUL here...
-                    #CAREFUL here... --> there is no XI field in the data so we need to mask this
-                    #because all consensus reads have at least 2 members
-                    #this is not the vest way to scan the 
-                    #b=tmp[17]
-                    #retrieve the XI
-                    #a=re.findall(r'\bXI:\S*',line)
-                    #a=a[0]
-                    #b=' '.join(str(x) for x in a)
-                    #t=a.split(':')
-
                     #mask XI field
                     t='2'
                     extraField=RNAME+':'+POS+':'+RNEXT+':'+PNEXT+':'+TLEN+':'+t+':'+FLAG
                     numValues=re.findall('\d+',CIGAR)
                     flagValues=re.findall('[A-Za-z]',CIGAR)
                     TLEN_int=abs(int(TLEN))
-
-                    #if TLEN_int<74:
-                        #print('QNAME:%s\tCIGAR:%s\tSEQ:%s\tREAD_LEN:%d\tnumValues:%s\tflagValues:%s\tINS_LEN:%s'%(QNAME,CIGAR,SEQ,len(SEQ),numValues,flagValues,TLEN_int))
 
                     prompt_pos=posKey.split('_')
                     prompt_pos=int(prompt_pos[1])
@@ -391,6 +370,7 @@ def generateFlatFile(samFileName,flatFileName,refGenome):
                                             elif eachFlag=='P':
                                                 countP=countP+1
                                     OutFile.write('\n')
+                                #used for debbuging
                                 #if countH>0 or countP>0:
                                     #print('\t\tWarning: Found %d positions with CIGAR flag H and %d positions with CIGAR flag P.'%(countH,countP))
                                 #OutFile.close()
@@ -567,7 +547,7 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
             readsT=variantDict['T']
             readsD=variantDict['D']
             readsI=variantDict['I']
-            #debug
+            #used to debug
             #print(readsI)
             #print('%s Total reads: %d and mutated: %d with A=%d C=%d G=%d and T=%d'%(pkey,allReads,mutatedReads,readsA,readsC,readsG,readsT))
             fileIN.close()
@@ -767,8 +747,9 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
             print('\n\t\t[%s] ERROR from function processFlatFile: The input flat file does not exist!\n'%(st))
     outFile.close()
 
-    #now erase the _read.txt file to save some space
+    # erase the _read.txt file to save some space
     command='rm '+currentFile
+    #dont run
     #os.system(command)
 
     return qnameDict
@@ -801,7 +782,7 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
         TLEN=myInfo[4]
         XI=int(myInfo[5])
         FLAG=myInfo[6]
-        #consider only those that have XI>2 in order to count them
+        #consider only those that have XI>2 to count them
         if(XI>=2):
             posKey=POS+'_'+str(abs(int(TLEN)))
             positionHashXI[posKey].append(QNAME)
@@ -826,8 +807,6 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
                 positionKey=POS
                 positionValue=TLEN+'_'+FLAG
                 positionHash[positionKey].append(positionValue)
-            #skip this part, it is causing error
-            #DEBUGING
             elif R1==R2:
                 dummy=0
             else:
@@ -848,11 +827,6 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
                 positionValue=str(myLen)+'_'+str(myFlag)
                 positionHash[positionKey].append(positionValue)
         #at this point we have all info we need to find duplexes
-    #REMOVE THE VARIANT DUPLEX DICT TO SAVE SOME SPACE
-    #dictionaryFileName=RESULTS+'/'+bamFilePrefix+'_'+pkey+'_'+base+'_VariantDuplexDict.txt'
-    #dictOUT=open(dictionaryFileName,'w')
-    #dictOUT.write('#PositionKEY\tReadPairs\tDuplexes\n')
-    #print('Processing %s: with len:%d\n'%(pkey,len(positionHash)))
     for dictIdx in positionHash:
         recordsFound=positionHash[dictIdx]
         count=len(recordsFound)
@@ -873,9 +847,6 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
     myStr=str(len(positionHashXI))+','+str(len(extraPositionHash))+','+str(DUP)
     return myStr
 
-#this function takes as input the insert size and number of duplexes
-#this function takes as input a list of read records indexed by insert size and finds how many reads are first in pair and how many second in pair
-#def findPairOrientation(insHash,dictOUT):
 def findPairOrientation(insHash):
     #scan the Hash and find all duplexes per start position
     DUP=0
@@ -917,16 +888,16 @@ def myMain():
     else:
         bamFile=sys.argv[1].split('bamFile=')
         bamFile=bamFile[1]
-        #parse the second argument
+        
         bedFile=sys.argv[2].split('positionFile=')
         bedFile=bedFile[1]
-        #parse the second argument
+        
         refGenome=sys.argv[3].split('referenceGenome=')
         refGenome=refGenome[1]
         #read the output dir
         outDIR=sys.argv[4].split('outDIR=')
         outDIR=outDIR[1]
-        #parse the last one
+        
         index=sys.argv[5].split('index=')
         index=index[1]
 
@@ -989,7 +960,6 @@ def myMain():
         print('\n\t[%s] Function generateFlatFile...'%(st))
         generateFlatFile(targetSamFileName,flatFileName,refGenome)
 
-
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Produce list of reads supporting the input variants: Releasing threads...'%(st))
@@ -1012,15 +982,11 @@ def myMain():
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Produce list of reads supporting the input variants: All threads collected...'%(st))
 
-
         #parse the read files and generate variant report
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Function variantScanner: identify the variants'%(st))
         QNAME_DICT=variantScanner(posList,bamFilePrefix,outDIR,SAM_FILES,index)
-
-        #here is missing the part that we generate the QNAME dict
-        #that is important for inspection
 
         #clear the intermediate files
         ts = time.time()

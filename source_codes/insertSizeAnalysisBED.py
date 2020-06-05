@@ -55,8 +55,6 @@ RUNNING
 
 '''
 
-#modules we need, I might have some extra that didnt use in the final version, but I forgot to remove.
-#Remember that this program is under-developement so you may find block of codes used for testing.
 import sys
 import os
 import pysam
@@ -70,7 +68,7 @@ import threading
 #prints information about program's execution
 def printUsage():
     print('To run this program please type the following:')
-    print('\tpython insertSizeAnalysisBED bamFile=file.bam bedFile=file.bed outDIR=XXXXX\n')
+    print('\tpython insertSizeAnalysisBED bamFile=file.bam bedFile=file.bed outDIR=/your/output/dir\n')
     print('Where:\n') 
     print('\tfile.bam is a bam file. The bam file needs to be indexed with samtools.\n')
     print('\tfile.bed is a standard bed file with minimum three columns chrom start stop\n')
@@ -80,7 +78,7 @@ def printUsage():
 
 #global variables
 exitFlag = 0
-#define minimum mapping quality; in a next implementation this can be adjusted by the user
+#define minimum mapping quality;
 quality='10'
 
 #class that processes one thread with input of one chromosome
@@ -118,7 +116,6 @@ def storeBedFile(bedFile):
         fileIN=open(bedFile,'r')
         #read the first line and store it to the dictionary
         for eachLine in fileIN:
-          #change here DEC 4 2018
             line = eachLine.rstrip('\r')
             line = line.rstrip('\n')
             tmp=line.split("\t")
@@ -177,7 +174,6 @@ def generateReport(bedList,bamFilePrefix,RESULTS,outDIR):
 
         myChrom=bedList[idx]
         myInterval=idx
-        #change here DEC 4 2018
         mtInterval=myInterval.split('\n')
         #we do this just to index the output
         tmp=myInterval.split('\t')
@@ -191,7 +187,7 @@ def generateReport(bedList,bamFilePrefix,RESULTS,outDIR):
         generateSamFile(myBam,samFileName,myInterval,RESULTS)
         #now read the target sam and generate the output
         parseSamFile(samFileName,OutReportFile,KEY)
-
+        #if you want to monitor your progress uncomment the following code
         #if count%100==0:
          # print('Processed %d intervals\n'%(count))
         #count=count+1
@@ -253,8 +249,6 @@ def parseSamFile(samFileName,OutReportFile,KEY):
       TLEN=tmp[8]
       #store records in the qHash
       #consider all reads irespective of the mapping quality
-      #in another implemetation this will be adjusted by the user
-      #quality=int(MAPQ)
       qnameKey=QNAME
       qHash[qnameKey].append(eachLine)
     #parse the reads by Qname
@@ -300,9 +294,11 @@ def parseSamFile(samFileName,OutReportFile,KEY):
             pairedLen.append(myLen)
           countReadPairs=countReadPairs+1
         else:
+          #used for debbuging
           #print('Malakia paizei edo:%s'%idx)
           #print('Mia malakia...\n')
           myskip=0
+          #used for debugging
     #print('Reads:%d\tReadsPaired:%d\tReadsNotPaired:%d\tReadsSame:%s\tReadsNotSame:%d\n'%(countTotalReads,countReadPairs,countNotPaired,countNotPairedSame,countNotPairedOther))
     #print('Paired len:%s\n\n\n'%pairedLen)
     #print('Non paired len:%s\n\n\n'%nonPairedLen)

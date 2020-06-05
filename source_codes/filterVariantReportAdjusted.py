@@ -31,8 +31,6 @@ END COPYRIGHT NOTICE
 
 '''
 
-#modules we need, I might have some extra that dont use finally
-#Remember that this program is under-developement
 import sys
 import os
 import re
@@ -48,14 +46,10 @@ def printUsage():
     print('Where:\n') 
     print('\tfile.txt is a variant report returned by duplexCaller\n')
     print('\tvcf.txt is the original VCF file that contains reference and mutated allele\n')
-   
-    #print('Execution example:\n') 
-    #print('\tpython filterVariantReportAdjusted.py inputFile=0091_test/RESULTS/0091_test_VariantReport.txt originalVCF=0091_allPositions.txt \n')
     print('Please give the arguments in the indicated order similar to the provided example!\nThe input data are pre-processed separately from the VCF using Unix commands') 
 
 
 def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
-
 
 	idx=0
 	variantDict=defaultdict(list)
@@ -124,8 +118,6 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 				AF_T=round(float(readsT)/float(totalReads),5)
 				valueT=totalReads+'\t'+readsT+'\t'+str(AF_T)+'\t'+distFragT+'\t'+distPairsT+'\t'+duplexT
 				variantDict[keyT].append(valueT)
-
-				#the AF of the deletion and insertion is the number reads with del or ins divided by the number of total reads
 
 				#here is the info for deletions
 				infoDEL = infoDEL.split(',')
