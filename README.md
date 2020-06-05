@@ -3,9 +3,10 @@
 Several recent studies have demonstrated the ability of cfDNA sequencing to provide early prognostication, better molecular profiling and monitoring of disease dynamics with many applications in genomic-driven oncology. 
 
 We provide a bioinformatics pipeline that offers:
-- cfDNA data preprocessing using UMIs
-- ultra-sensitive detection of SNVs using VarDict and duplexCaller 
-- annotation of variants using VEP and evaluation of fragmentation profiles of cfDNA
+- cfDNA data de-duplication using UMIs
+- sensitive detection of SNVs using VarDict and duplexCaller 
+- annotation of variants using VEP  
+- evaluation of fragmentation profiles of cfDNA
 
 ## Publication
 
