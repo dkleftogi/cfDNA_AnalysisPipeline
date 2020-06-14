@@ -12,7 +12,7 @@ We provide a bioinformatics pipeline that offers:
 
 Title: Detection of genomic alterations in breast cancer with circulating free DNA sequencing  
 
-Journal: N/A
+Journal: The paper is under 2nd major revision in Scientific Reports.
 
 Published: pre-print available at bioRxiv https://www.biorxiv.org/content/10.1101/733691v1?rss=1
 
