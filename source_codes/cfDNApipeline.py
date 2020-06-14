@@ -58,30 +58,9 @@ DEPENDENCIES
 
 RUNNING
     
-    An execution example is as follows, let us assume that: 
+    Please visit https://github.com/dkleftogi/cfDNA_AnalysisPipeline/blob/master/Execution_examples.md
 
-    /home/centos is your working dir
-
-    /home/centos/data/example.bam is your input bam file
-
-    /home/centos/Results is the dir where you want to save the results
-
-    /home/centos/References/hg38.fa is your reference genome
-
-    /home/centos/bedFiles/panel.bed is your panel design
-
-    0.005 is your minimum VAF (you can set even lower value like 0.00001)
-
-    ZU is the UMI tag, other samples might have RX or so depending on the setup
-
-    /home/centos/vepCache is the dir of your VEP cache
-
-    Then you type:
-
-    python cfDNApipeline.py workingDir=/home/centos fileName=/home/centos/data/example.bam resultsDir=/home/centos/Results referenceGenome=/home/centos/References/hg38.fa bedFile=/home/centos/bedFiles/panel.bed minVAF=0.005 tagUMI=ZU vepDir=/home/centos/vepCache
-
-
-    To obtain the toy data contact Dimitrios
+    We provide a step-by-step execution example. To obtain toy data used in this example please contact Dimitrios.
 
 '''
 
@@ -144,7 +123,7 @@ def storeFile(myFile):
 #this function takes the bam file with UMIs and removes the duplicates
 def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,tagUMI):
 
-    #workingDir is the absolute path to your conda installation given from argument
+    #workingDir is the absolute path to your conda installation given from user's argument
     GATK_merge='java -Xmx10g -XX:-UseGCOverheadLimit -d64 -jar '+workingDir+'/miniconda2/share/picard-2.20.3-0/picard.jar MergeSamFiles'
     GATK_deDup='java -Xmx10g -XX:-UseGCOverheadLimit -d64 -jar '+workingDir+'/miniconda2/share/picard-2.20.3-0/picard.jar MarkDuplicates'
     GATK_sort='java  -Xmx10g -XX:-UseGCOverheadLimit -d64 -jar '+workingDir+'/miniconda2/share/picard-2.20.3-0/picard.jar SortSam'
@@ -166,8 +145,6 @@ def processSample(fileHash,workingDir,resultsDir,referenceGenome,scriptsFolder,t
         mergedDIR=fileHash[myArg]
 
         #command 1
-
-        #in Amazon EC2 clusters provided by RONIN TMP_DIR=/shared is a dir with a lot of space to store interm results
         mainCommand=GATK_sort+' I='+mergedDIR+'/'+myArg+'.bam O='+resultsDir+'/'+myArg+'.mergedQNAMEsorted.bam SO=queryname VERBOSITY=INFO TMP_DIR=/tmp'
         outScript.write(mainCommand)
         outScript.write("\n\n")
@@ -241,8 +218,8 @@ def variantScreening(fileHash,workingDir,resultsDir,referenceGenome,bedFile,scri
         outScript.write(mainCommand)
         outScript.write("\n\n")
 
-        #we also annotate variants 
-        #check here https://m.ensembl.org/info/docs/tools/vep/script/vep_cache.html for more info about caches if needed
+        #we annotate variants 
+        #check https://m.ensembl.org/info/docs/tools/vep/script/vep_cache.html for more info about caches if needed
         mainCommand='vep -i '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.vcf -o '+resultsDir+'/'+myArg+'.FgbioDeDup.VarDict.VEP.vcf --species homo_sapiens --cache --dir '+vepDir +' --canonical --check_existing --force_overwrite --vcf --buffer_size 50'
         outScript.write(mainCommand)
         outScript.write("\n")
@@ -650,6 +627,6 @@ def myMain():
 
         print('************************************************************************************************************************************\n')
 
-#this is where we start ...
+#start ...
 if __name__=='__main__':
     myMain()

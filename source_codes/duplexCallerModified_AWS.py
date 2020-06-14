@@ -50,7 +50,7 @@ INPUT ARGUMENTS
 
 RUNNING
 	
-	An execution example is as follows:
+	A simple execution example is as follows:
 
     python duplexCallerModified_AWS.py bamFile=test.chr17.bam positionFile=positions.bed referenceGenome=file.fa outDIR=Results index=1
 
@@ -263,7 +263,7 @@ def generateFlatFile(samFileName,flatFileName,refGenome):
             #load the reference genome
             myFasta=pysam.FastaFile(refGenome)
             for eachLine in InSamFile:
-                #here might be is a problem with the TAB delimiting in Python 3; check versions if there is any problem
+                #here might be is a problem with the TAB delimiting in Python 3; check python or OS versions if there is any problem
                 line = eachLine.rstrip('\n')
                 tmp=line.split("\t")
                 #read the sam fields we neeed
@@ -530,7 +530,6 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
                         key=currentBase
                         variantDict[key].append(eachLine)
                     elif(variantFlag=='NO' and cigarFlag=='D'):
-                        #we need to check the number of reads reported compared to the results from IGV
                         #allReads=allReads+1
                         key='D'
                         variantDict[key].append(eachLine)
@@ -747,7 +746,7 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
             print('\n\t\t[%s] ERROR from function processFlatFile: The input flat file does not exist!\n'%(st))
     outFile.close()
 
-    # erase the _read.txt file to save some space
+    #erase the _read.txt file to save some space
     command='rm '+currentFile
     #dont run
     #os.system(command)
@@ -755,7 +754,6 @@ def variantScanner(posList,bamFilePrefix,RESULTS,SAM_FILES,index):
     return qnameDict
 
 #this functions processes the reads carrying the variant of interest and reports the information we need
-#to decide about the variant calling
 def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
 
     #variable dummy
@@ -829,7 +827,7 @@ def processVariantReads(myHash,bamFilePrefix,RESULTS,pkey,base):
     for dictIdx in positionHash:
         recordsFound=positionHash[dictIdx]
         count=len(recordsFound)
-        #here we can compute the duplexes per position, we just need to index them by TLEN
+        #compute the duplexes per position, need to index them by TLEN
         insHash=defaultdict(list)
         for TlenIdx in recordsFound:
             tmp=TlenIdx.split("_")
@@ -923,7 +921,7 @@ def myMain():
         posList=storePositionsFile(bedFile)
         chromList=storeChromosomes(bedFile)
 
-        #here need to do the splitting of chromosomes
+        #splitting of chromosomes
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Spliting the original BAM per chromosome: Releasing threads...'%(st))
@@ -941,7 +939,7 @@ def myMain():
             t.join()
         del threads
 
-        #and collect them
+        #collect them
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Spliting the original BAM per chromosome: All threads collected...'%(st))
@@ -973,10 +971,10 @@ def myMain():
             thread.start()
             threads.append(thread)
             i=i+1
-        #find your threads
+        #find threads
         for t in threads:
             t.join()
-        #and collect them
+        #collect them
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Produce list of reads supporting the input variants: All threads collected...'%(st))
@@ -994,7 +992,7 @@ def myMain():
         cleanFiles(SAM_FILES)
 
 
-#this is where we start ...
+#start 
 if __name__=='__main__':
     myMain()
 

@@ -2,7 +2,7 @@
 
 '''
 				Analysis of coverage and fragment lenght for bed file with multiple regions
-                      Parallel implementation using multi-threading
+                            Parallel implementation using multi-threading
 
 BEGIN COPYRIGHT NOTICE
 
@@ -96,7 +96,7 @@ class myThread (threading.Thread):
         #print('%s\n'%myStr) 
         splitChrom(self.name,self.chrom,self.fileName, self.inputBam,self.myDir)
 
-#this is the actual command that runs samtools for one chromosome
+#run samtools for one chromosome
 def splitChrom(threadName, chrom, fileName, inputBam, myDir):
    if exitFlag:
       threadName.exit()
@@ -187,7 +187,7 @@ def generateReport(bedList,bamFilePrefix,RESULTS,outDIR):
         generateSamFile(myBam,samFileName,myInterval,RESULTS)
         #read the target sam and generate the output
         parseSamFile(samFileName,OutReportFile,KEY)
-        #to monitor progress uncomment the following code
+        #uncomment the following code to monitor progress
         #if count%100==0:
          # print('Processed %d intervals\n'%(count))
         #count=count+1
@@ -206,7 +206,7 @@ def generateSamFile(bamFile,samFileName,myInterval,RESULTS):
         tmpOut=open(tmpBedFile,'w')
         tmpOut.write('%s'%(myInterval))
         tmpOut.close()
-        #prepare the output of my SAM file
+        #prepare the output of SAM file
         outSAM=open(samFileName,'w')
         for eachLine in pysam.view('-q',quality,'-L',tmpBedFile,bamFile):
           outSAM.write(eachLine)
@@ -234,10 +234,10 @@ def parseSamFile(samFileName,OutReportFile,KEY):
     nonPairedLen=[]
     for eachLine in InSamFile:
       countTotalReads=countTotalReads+1
-      #store the reads by QNAME so we can identify the paired reads
+      #store the reads by QNAME to identify the paired reads
       line = eachLine.rstrip('\n')
       tmp=line.split("\t")
-      #read the sam fields we neeed
+      #read the sam fields neeeded
       QNAME=tmp[0]
       FLAG=tmp[1]
       RNAME=tmp[2]
@@ -341,7 +341,7 @@ def myMain():
         printUsage()
     else:
         #parse the first input arguments 
-        #here if the user does not input the correct argument name it gets an error and the program stops
+        #if the user does not input the correct argument name it gets an error and the program stops
         bamFile=sys.argv[1].split('bamFile=')
         bamFile=bamFile[1]
         #parse the second argument
@@ -381,7 +381,7 @@ def myMain():
         #release the threads
         threadLock = threading.Lock()
         
-        #wave 1
+        #wave 1 for load balancing
         threads = []
         i=1
         for chrom in chromList:
@@ -510,7 +510,7 @@ def myMain():
         del threads
 
         
-        #and collect them
+        #collect them
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print('\n\t[%s] Spliting the original BAM per chromosome: All threads collected...'%(st))
@@ -530,7 +530,7 @@ def myMain():
         
         print('************************************************************************************************************************************\n')
 
-#this is where we start
+#start
 if __name__=='__main__':
     myMain()
 

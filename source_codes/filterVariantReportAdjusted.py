@@ -46,7 +46,7 @@ def printUsage():
     print('Where:\n') 
     print('\treport.txt is a variant report returned by duplexCaller\n')
     print('\tvcf.txt is the original VCF file that contains reference and mutated allele\n')
-    print('Please give the arguments in the indicated order similar to the provided example!\nThe input data are pre-processed separately from the VCF using Unix commands') 
+    print('Please give the arguments in the indicated order similar to the provided example!\n') 
 
 
 def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
@@ -81,7 +81,7 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 				infoDEL = tmp[14]
 				infoINS = tmp[15]
 
-				#store per position each nucleotide separately
+				#store per position each nucleotide
 				
 				infoA = infoA.split(',')
 				distFragA = infoA[0]
@@ -119,7 +119,7 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 				valueT=totalReads+'\t'+readsT+'\t'+str(AF_T)+'\t'+distFragT+'\t'+distPairsT+'\t'+duplexT
 				variantDict[keyT].append(valueT)
 
-				#here is the info for deletions
+				#info for deletions
 				infoDEL = infoDEL.split(',')
 				distFragDEL = infoDEL[0]
 				distPairsDEL = infoDEL[1]
@@ -130,7 +130,7 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 				valueDEL=totalReads+'\t'+readsDEL+'\t'+str(AF_DEL)+'\t'+distFragDEL+'\t'+distPairsDEL+'\t'+duplexDEL
 				variantDict[keyDEL].append(valueDEL)
 
-				#here is the info for insertions
+				#info for insertions
 				infoINS = infoINS.split(',')
 				distFragINS = infoINS[0]
 				distPairsINS = infoINS[1]
@@ -143,7 +143,7 @@ def storeVariantReport(inputFile,originalVCF,inputFilePrefix):
 
 		InFile.close()
 
-		#at this point we have the positions of interest stored and we need to scan the original file and report the data
+		#we have the positions of interest stored and scan the original file to report the results
 	if os.path.exists(originalVCF):
 		InFile=open(originalVCF,'r')
 		idx=0
@@ -393,7 +393,7 @@ def myMain():
 		storeVariantReport(inputFile,originalVCF,inputFilePrefix)
 
 
-#this is where we start ...
+#start ...
 if __name__=='__main__':
 	myMain()
 
