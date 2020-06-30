@@ -72,7 +72,7 @@ The main program is cfDNApipeline.py that take as input the following arguments:
 	
 ```
 
-To make the example more interactive let us assume the following exxample with input arguments:
+To make the example more interactive let us assume the following with input arguments:
 
 ```
 	1. /home/centos 
@@ -116,7 +116,7 @@ The output is a file named:
 ```
 which contains only consensus reads after merging together reads with the same UMI tag.  
 
-Please note that this step generates many intermediate results that are removed at the end of execution (TODO). 
+Please note that this step generates many intermediate results that are to be removed at the end of execution. 
 
 Next, file /home/centos/Results/example.FgbioDeDup.bam is used as input to VarDict for variant screening with minimum VAF=0.005
 
@@ -139,7 +139,7 @@ The output of this step is a file named:
  /home/centos/Results/example.FgbioDeDup.Vardict.VEP.filtered.txt
 ```
 
-The post-filtered file is then passed to duplexCaller that identifies variants supported by in-silico duplexes. 
+The post-filtered file is then passed to duplexCaller that identifies variants supported by "duplex pair reads". Please see the original publication of duplexCaller for more info about in-silico duplexes  
 
 The original duplexCaller implementation can be found at https://github.com/dkleftogi/duplexFiltering
 
@@ -152,12 +152,12 @@ The final output of variant calling is a file named:
 
 The last step of the pipeline concerns the evaluation profiles of cfDNA.
 
-To do so we have developed a program named insertSizeAnalysisBED.py that evaluates fragmentation profiles of cfDNA and produces the following:
+To do so we have developed a program named insertSizeAnalysisBED.py that evaluates fragmentation profiles of cfDNA and produces the following output:
 ```
  /home/centos/Results/example.FgbioDeDup_Distreport.txt
 ```
 
-### Question 4: Is it possible to run specific parts of the workflow and not the full thing ?
+### Question 4: Is it possible to run specific parts of the workflow and not the full pipeline ?
 
 The short answer to this question is NO. We are planning to provide this functionality in the future.
 

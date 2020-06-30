@@ -6,7 +6,7 @@ We provide a bioinformatics pipeline that offers:
 - cfDNA data de-duplication using UMIs
 - sensitive detection of SNVs using VarDict and duplexCaller 
 - annotation of variants using VEP  
-- evaluation of fragmentation profiles of cfDNA
+- evaluation of fragmentation profiles of cfDNA (NEW)
 
 ## Publication
 
@@ -43,9 +43,9 @@ Our bioinformatics pipeline is developed on a Mac OS computer with Mojave versio
 
 #### Current Release
 
-19-Jul-2019 : Beta version 1 (installed and tested on Centos); does not clean intermediate results.
+19-Jul-2019 : Beta version 1 (installed and tested on Centos)
 
-5-Jun-2020  : We cleaned the codes and removed some "TODO staff" after the comment we received from one reviewer.
+5-Jun-2020  : We updated the codes and improved the documentation. Some comments with "TODO" reminders were removed after the concern of one of the reviewers.
 
 ## Contact
 
